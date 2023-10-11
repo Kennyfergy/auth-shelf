@@ -47,7 +47,7 @@ router.delete("/:id", (req, res) => {
   const userId = req.user.id;
 
   pool
-    .query("DELETE FROM shelf WHERE id = $1 AND user_id = $2", [itemId, userId])
+    .query("DELETE FROM item WHERE id = $1 AND user_id = $2", [itemId, userId])
     .then((result) => {
       if (result.rowCount > 0) {
         res.sendStatus(204); // No Content
