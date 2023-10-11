@@ -9,7 +9,6 @@ const {
 //
 //
 
-
 /**
  * Get all of the items on the shelf
  */
@@ -30,11 +29,11 @@ router.get("/", rejectUnauthenticated, (req, res) => {
  * Add an item for the logged in user to the shelf
  */
 router.post("/", rejectUnauthenticated, (req, res) => {
-  const { itemName, imageUrl } = req.body;
+  const { description, imageUrl } = req.body;
   console.log(req.body);
   const queryText =
     "INSERT INTO item (description, image_url, user_id) VALUES ($1, $2, $3)";
-  const queryValues = [itemName, imageUrl, req.user.id];
+  const queryValues = [description, imageUrl, req.user.id];
   pool
     .query(queryText, queryValues)
     .then(() => res.sendStatus(201))
