@@ -25,22 +25,23 @@ function* fetchShelfSaga() {
 }
 
 function* addShelfSaga(action) {
-    try {
-      yield axios.post("/api/shelf", action.payload);
-      yield put({ type: "FETCH_SHELF" });
-    } catch (error) {
-      console.log("Error adding item:", error);
-    }
+  try {
+    yield axios.post("/api/shelf", action.payload);
+
+    yield put({ type: "FETCH_SHELF" });
+  } catch (error) {
+    console.log("Error adding item:", error);
   }
-  
-  function* deleteItem(action) {
-    try {
-      console.log(action.payload);
-      yield axios.delete(`/api/shelf/${action.payload}`);
-      yield put({ type: "FETCH_SHELF" });
-    } catch (error) {
-      console.log("error in deleteItem saga", error);
-    }
+}
+
+function* deleteItem(action) {
+  try {
+    console.log(action.payload);
+    yield axios.delete(`/api/shelf/${action.payload}`);
+    yield put({ type: "FETCH_SHELF" });
+  } catch (error) {
+    console.log("error in deleteItem saga", error);
   }
+}
 
 export default shelfSaga;
