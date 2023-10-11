@@ -47,7 +47,7 @@ function ShelfPage() {
       <p>All of the available items can be seen here.</p>
       <div>
         {store.map((item) => (
-          <>
+          <ul key={item.id}>
             <li>
               {item.description}
 
@@ -61,7 +61,7 @@ function ShelfPage() {
                 Delete{" "}
               </button>
             </li>
-          </>
+          </ul>
         ))}
       </div>
     </div>
