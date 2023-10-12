@@ -78,16 +78,23 @@ router.delete("/:id", (req, res) => {
  */
 router.put("/:id", (req, res) => {
   // endpoint functionality
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
+  const updatedItem = req.body;
+  const userID = req.user.id;
+  const queryText = `UPDATE "item" SET "description" = $1, image_url = $2 WHERE id = $3 AND user_id = $4`;
+  pool
+    .query(queryText, [
+      updatedItem.description,
+      updatedItem.image_url,
+      updatedItem.id,
+      userID,
+    ])
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      console.log("Error updating item", err);
+      res.sendStatus(500);
+    });
 });
 
 /**

@@ -95,12 +95,7 @@ function ShelfPage() {
                   <img
                     src={item.image_url}
                     alt={item.description}
-                    loading="lazy"
-                    style={{
-                      maxHeight: "200px",
-                      maxWidth: "auto",
-                      objectFit: "cover",
-                    }}
+                    className="imageItem"
                   />
                 </ImageListItem>
               </ImageList>
