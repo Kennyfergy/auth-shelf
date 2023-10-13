@@ -13,6 +13,8 @@ import {
   Slide,
   Tooltip,
 } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import "./ShelfPage.css";
@@ -20,8 +22,10 @@ import "./ShelfPage.css";
 function ShelfPage() {
   const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [editMode, setEditMode] = useState(0);
   const dispatch = useDispatch();
   const store = useSelector((store) => store.shelf);
+  console.log(store);
 
   useEffect(() => {
     dispatch({ type: "FETCH_SHELF" });
@@ -31,6 +35,16 @@ function ShelfPage() {
     event.preventDefault();
     const newItem = { description, imageUrl };
     dispatch({ type: "ADD_ITEM", payload: newItem });
+    setDescription("");
+    setImageUrl("");
+  };
+
+  const handleUpdateItem = (event, id) => {
+    event.preventDefault();
+    const updatedItem = { description, imageUrl, user_id };
+    console.log("updated item", updatedItem);
+    dispatch({ type: "UPDATE_ITEM", payload: updatedItem });
+    setEditMode(0);
     setDescription("");
     setImageUrl("");
   };
@@ -82,6 +96,10 @@ function ShelfPage() {
       <Typography paragraph></Typography>
       <List>
         {store.map((item, index) => (
+          //  {editMode === item.id ? (
+          //   <input value={item.description}/>
+          //   <input value={item.image_url})} />
+          //
           <Slide
             direction="up"
             in={true}
@@ -95,26 +113,48 @@ function ShelfPage() {
                   <img
                     src={item.image_url}
                     alt={item.description}
-                    loading="lazy"
-                    style={{
-                      maxHeight: "200px",
-                      maxWidth: "auto",
-                      objectFit: "cover",
-                    }}
+                    className="imageItem"
                   />
                 </ImageListItem>
               </ImageList>
-              <Typography>{item.description}</Typography>
-              <IconButton
-                edge="end"
-                aria-label="delete"
-                onClick={() =>
-                  dispatch({ type: "DELETE_ITEM", payload: item.id })
-                }
-                size="small"
-              >
-                <DeleteIcon />
-              </IconButton>
+              {editMode === item.id ? (
+                <form onSubmit={(e) => handleUpdateItem(e, item.id)}>
+                  <TextField
+                    label="Description"
+                    defaultValue={item.description}
+                    onChange={(e) => setDescription(e.target.value)}
+                  />
+                  <TextField
+                    label="Image URL"
+                    defaultValue={item.image_url}
+                    onChange={(e) => setImageUrl(e.target.value)}
+                  />
+                  <Button type="submit">Save</Button>
+                  <Button onClick={() => setEditMode(0)}>Cancel</Button>
+                </form>
+              ) : (
+                <>
+                  <Typography>{item.description}</Typography>
+                  <IconButton
+                    edge="end"
+                    aria-label="delete"
+                    onClick={() =>
+                      dispatch({ type: "DELETE_ITEM", payload: item.id })
+                    }
+                    size="small"
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                  <IconButton
+                    edge="end"
+                    aria-label="edit"
+                    onClick={() => setEditMode(item.id)}
+                    size="small"
+                  >
+                    <EditIcon />
+                  </IconButton>
+                </>
+              )}
             </ListItem>
           </Slide>
         ))}

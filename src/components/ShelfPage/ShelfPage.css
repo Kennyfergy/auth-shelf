@@ -84,3 +84,9 @@ img {
   align-content: center;
   margin: auto;
 }
+.imageItem {
+  width: 100%;
+  height: auto;
+  max-height: 300px; /* Adjust maximum height as needed */
+  object-fit: cover;
+}
