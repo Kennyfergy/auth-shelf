@@ -1,10 +1,11 @@
-import { put, takeLatest } from "redux-saga/effects";
+import { put, take, takeLatest } from "redux-saga/effects";
 import axios from "axios";
 
 function* shelfSaga() {
   yield takeLatest("DELETE_ITEM", deleteItem);
   yield takeLatest("FETCH_SHELF", fetchShelfSaga);
   yield takeLatest("ADD_ITEM", addShelfSaga);
+  yield takeLatest("UPDATE_ITEM", updateItemSaga);
 }
 
 function* fetchShelfSaga() {
@@ -41,6 +42,17 @@ function* deleteItem(action) {
     yield put({ type: "FETCH_SHELF" });
   } catch (error) {
     console.log("error in deleteItem saga", error);
+    alert("NOT ALLOWED");
+  }
+}
+
+function* updateItemSaga(action) {
+  try {
+    console.log("in update saga", action.payload);
+    yield axios.put(`/api/shelf/${action.payload.id}`, action.payload);
+    yield put({ type: "FETCH_SHELF" });
+  } catch (error) {
+    console.log("error in update item saga", error);
   }
 }
 
